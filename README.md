@@ -37,6 +37,8 @@ Some features of this project require the use of npx to install and configure co
 
 ```bash
 npx shadcn@latest add button
+npx shadcn@latest add input
+npx shadcn@latest add sonner
 npx shadcn@latest add dialog
 ```
 This command will automatically add the components to the project, and you’ll be able to use it right away.
