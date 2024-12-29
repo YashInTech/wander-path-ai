@@ -1,9 +1,10 @@
-import { SelectBudgetOptions, SelectTravelList } from '@/constants/options'
+import { AI_PROMPT, SelectBudgetOptions, SelectTravelList } from '@/constants/options'
 import React, { useEffect, useState } from 'react'
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { chatSession } from '@/service/aiModel';
 
 function CreateTrip() {
 
@@ -35,6 +36,19 @@ function CreateTrip() {
       toast('Number of days should be less than or equal to 30');
       return;
     }
+
+    const FINAL_PROMPT = AI_PROMPT
+      .replace('{location}', formData?.location?.label)
+      .replace('{totalDays}', formData?.numberOfDays)
+      .replace('{travelers}', formData?.travelers)
+      .replace('{budget}', formData?.budget);
+
+    console.log(FINAL_PROMPT);
+
+    const result = await chatSession.sendMessage(FINAL_PROMPT);
+
+    console.log(result?.response?.text());
+  
   }
 
   return (

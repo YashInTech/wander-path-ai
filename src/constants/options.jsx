@@ -4,35 +4,35 @@ export const SelectTravelList=[
         title:'Just Me',
         desc:'A sole traveler in exploration',
         icon:'✈',
-        people:'1'
+        people:'1 person'
     },
     {
         id:2,
         title:'Couple',
         desc:'A romantic getaway for two',
         icon:'🥂',
-        people:'2'
+        people:'2 people'
     },
     {
         id:3,
         title:'Friends',
         desc:'A bunch of thrill-seekes',
         icon:'⛵',
-        people:'3 to 8'
+        people:'3 to 8 people'
     },
     {
         id:4,
         title:'Small Family',
         desc:'A small family of explorers',
         icon:'🧳',
-        people:'3 to 4'
+        people:'3 to 4 people'
     },
     {
         id:5,
         title:'Large Family',
         desc:'A group of fun loving adventurers',
         icon:'🏡',
-        people:'5 to 10'
+        people:'5 to 10 people'
     }
 ]
 
@@ -57,4 +57,4 @@ export const SelectBudgetOptions=[
     }
 ]
 
-export const AI_PROMPT = 'Generate a travel plan for location : {location} for {totalDays} for {travelers} with a {budget} budget.Give me a Hotel Option list with HotelName, Address, Price, hotel image url, geo coordinates, ratings, descriptions. Also suggest itinenary with place names to visit, time to visit, ticket prices, details, image url, geo coordinates, ratings. In a JSON Format.';
+export const AI_PROMPT = 'Generate a travel plan for location : {location} for {totalDays} day(s) for {travelers} with a {budget} budget.Give me a Hotel Option list with HotelName, Address, Price, hotel image url, geo coordinates, ratings, descriptions. Also suggest itinenary with place names to visit, time to visit, ticket prices, details, image url, geo coordinates, ratings. In a JSON Format.';
