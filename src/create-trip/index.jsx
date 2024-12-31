@@ -16,6 +16,9 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '@/service/firebaseConfig';
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 function CreateTrip() {
 
@@ -24,6 +27,8 @@ function CreateTrip() {
   const [formData, setFormData] = useState({});
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const[loading, setLoading] = useState(false);
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -63,18 +68,38 @@ function CreateTrip() {
       return;
     }
 
+    setLoading(true);
+
     const FINAL_PROMPT = AI_PROMPT
       .replace('{location}', formData?.location?.label)
       .replace('{totalDays}', formData?.numberOfDays)
       .replace('{travelers}', formData?.travelers)
       .replace('{budget}', formData?.budget);
 
-    console.log(FINAL_PROMPT);
-
     const result = await chatSession.sendMessage(FINAL_PROMPT);
 
-    console.log(result?.response?.text());
-  
+    console.log("--", result?.response?.text());
+
+    setLoading(false);
+    
+    SaveTrip(result?.response?.text());
+  }
+
+  const SaveTrip = async (TripData) => {
+
+    setLoading(true);
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const docId = Date.now().toString();
+
+    await setDoc(doc(db, "AiTrips", docId), {
+      userPreference: formData,
+      tripData: JSON.parse(TripData),
+      userEmail: user?.email,
+      id: docId
+    });
+
+    setLoading(false);
   }
 
   const GetUserProfile = (tokenInfo) => {
@@ -150,7 +175,11 @@ function CreateTrip() {
       </div>
 
       <div className='justify-end flex my-10'>
-        <Button onClick={OnGenerateTrip}>Generate Trip</Button>
+        <Button onClick={OnGenerateTrip} disabled={loading}>
+        {
+          loading ? <AiOutlineLoading3Quarters className='animate-spin' /> : "Generate Trip"
+        }
+        </Button>
       </div>
 
       <Dialog open={openDialog}>
