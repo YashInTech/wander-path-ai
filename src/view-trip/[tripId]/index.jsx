@@ -30,7 +30,7 @@ function ViewTrip() {
   }
 
   return (
-    <div className='p-10 md:px-14 lg:px-20 xl:px-24'>
+    <div className='sm:px-10 md:px-14 lg:px-20 xl:px-24 px-5 sm:m-10 m-5'>
         {/* Information Section */}
         <InfoSection trip={trip} />
         {/* Recommended Hotels */}

@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../ui/button'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { FcGoogle } from "react-icons/fc";
 import axios from 'axios';
+import { DialogTrigger } from '@radix-ui/react-dialog';
 
 function Header() {
 
@@ -46,52 +42,81 @@ function Header() {
     })
   }
 
+  const handleLogout = () => {
+    googleLogout();
+    localStorage.clear();
+    window.location.reload();
+  };
+
   return (
     <div className='p-3 shadow-md flex justify-between items-center px-5'>
-        <img src="/mainLogo.png" />
+        <a href="/" className='cursor-auto'>
+          <img src="/mainLogo.png" />
+        </a>
         <div>
-            {user ? 
+            {user ? (
             <div className='flex items-center gap-3'>
+              <a href='/create-trip'>
+                <Button variant='outline' 
+                className='rounded-full text-black'>+ Create Trip</Button>
+              </a>
               <a href='/my-trips'>
                 <Button variant='outline' 
-                className='rounded-full'>My Trips</Button>
+                className='rounded-full text-black'>My Trips</Button>
               </a>
-              <Popover>
-                <PopoverTrigger><img src={user?.picture} className='h-9 w-9 rounded-full'/></PopoverTrigger>
-                <PopoverContent>
-                  <h2 className='cursor-pointer' onClick={() => {
-                    googleLogout();
-                    localStorage.clear();
-                    window.location.reload();
-                  }}>Log Out</h2>
-                </PopoverContent>
-              </Popover>              
-            </div>
-            : <Button onClick = {() => 
-              setOpenDialog(true)
-            }>Sign In</Button> }
+              <Dialog> 
+              <DialogTrigger asChild>
+                <img src={user?.picture} className='h-10 w-10 rounded-full cursor-pointer' />
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="text-center text-2xl">Hi, {user?.name}
+                  </DialogTitle>
+                  <span className='font-bold text-center text-xl'>Here are your Account Details</span>
+                </DialogHeader>
+                <div className='flex flex-row gap-20'>
+                <DialogDescription className="mt-4 text-lg text-black">
+                  <span className='font-bold'>
+                    Email: </span> {user?.email} <br />
+                  <span className='font-bold'>
+                    User Id: </span> {user?.id}
+                </DialogDescription>
+                <DialogDescription>
+                  <img src={user?.picture} className='h-24 w-24 rounded-full' />
+                </DialogDescription>
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleLogout} className="w-full rounded-full">Log Out</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>              
+          </div>
+        ) : (
+          <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+            <DialogTrigger asChild>
+              <Button>Sign In</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="flex justify-center items-center">
+                  <img src="/mainLogo.png" alt="Logo" />
+                </DialogTitle>
+                <DialogDescription className="flex flex-col justify-center items-center text-center mt-7">
+                  <span className="font-bold text-xl text-black">Login In or Sign Up</span>
+                  <span className="text-center">with Google Authentication Securely.</span>            
+                </DialogDescription>
+              </DialogHeader>
+              <Button onClick={login} className="w-full my-5 flex gap-4 items-center justify-center rounded-full">
+                <FcGoogle style={{ transform: 'scale(1.3)' }} />Continue with Google
+              </Button>
+              <DialogFooter className="text-xs text-center">
+                By logging in or signing up, you agree to WanderPathAI's Terms & Conditions and Privacy Policy
+              </DialogFooter>
+            </DialogContent>
+          </Dialog> )}
         </div>
 
-        <Dialog open={openDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="flex justify-center items-center">
-                <img src="/mainLogo.png" alt="Logo" />
-              </DialogTitle>
-              <DialogDescription className="flex flex-col justify-center items-center text-center mt-7">
-                <span className="font-bold text-xl text-black">Login In or Sign Up</span>
-                <span className="text-center">with Google Authentication Securely.</span>
-                <Button onClick={login}
-                className="w-full my-5 flex gap-4 items-center justify-center rounded-full">
-                  <FcGoogle style={{ transform: 'scale(1.3)' }} />Continue with Google
-                </Button>
-                <span className="text-xs text-center mt-2">
-                  By logging in or signing up, you agree to WanderPathAI's Terms & Conditions and Privacy Policy
-                </span>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        
     </div>
   )
 }

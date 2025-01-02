@@ -23,7 +23,7 @@ function HotelCardItem({hotel}) {
   return (
     <Link to = {'https://www.google.com/maps/search/?api=1&query='+ hotel?.hotelName + hotel?.address} target="_blank">
       <div className='hover:scale-105 transition-all cursor-pointer'>
-        <img src={photoUrl ? photoUrl : '/hotel_placeholder.jpg'} className='rounded-xl h-[180px] w-full object-cover' />
+        <img src={photoUrl ? photoUrl : '/hotel_placeholder.jpg'} className='rounded-xl sm:h-[180px] h-32 w-full object-cover' />
         
         <div className='my-2 flex  flex-col gap-2'>
           <h2 className='font-medium text-black'>{hotel.hotelName}</h2>

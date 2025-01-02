@@ -10,7 +10,7 @@ function Itinerary({trip}) {
         <div>
             {trip?.tripData?.travelPlan?.itinerary?.map((item, index) => (
                 <div key={index}>
-                    <h2 className='font-medium text-lg mt-2'>Day {item?.day}: {item?.theme}</h2>
+                    <h2 className='font-medium sm:text-lg text-base mt-2'>Day {item?.day}: {item?.theme}</h2>
                     {item?.placesToVisit?.map((place, index) => (
                         <div key={index}>
                             <h2 className='font-medium text-sm text-orange-600 mt-2'>🎯 {place?.timeToVisit}</h2>

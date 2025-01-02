@@ -9,6 +9,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -123,56 +124,57 @@ function CreateTrip() {
 
   return (
     <div className='sm:px-10 md:px-14 lg:px-20 xl:px-24 px-5 m-10'>
-      <h2 className='font-bold text-3xl'>Tell Us Your Travel Preferences 🌴</h2>
-      <p className='mt-3 text-gray-500 text-xl'>Just provide some basic information,
+      <h2 className='font-bold text-2xl sm:text-3xl'>Tell Us Your Travel Preferences 🌴</h2>
+      <p className='mt-3 text-gray-500 sm:text-xl text-lg'>Just provide some basic information,
         and our trip planner will generate a customized itinerarybased on your preferences. </p>
 
-      <div className='m-10 flex flex-col gap-10'>
+      <div className='sm:m-10 m-5 flex flex-col gap-10'>
         <div>
-          <h2 className='text-xl my-3 font-medium'>What is your Destination?</h2>
+          <h2 className='sm:text-xl text-base my-3 font-medium'>What is your Destination?</h2>
+
           <GooglePlacesAutocomplete
             apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY}
             selectProps={{
               place,
               onChange: (v) => { setPlace(v); handleInputChange('location', v) }
-            }}
+            }} className='w-full text-sm sm:text-base'
           />
         </div>
 
         <div>
-          <h2 className='text-xl my-3 font-medium'>How many days are you planning your travel?</h2>
-          <Input placeholder='Enter the number of days' type='number'
+          <h2 className='sm:text-xl text-base my-3 font-medium'>How many days are you planning your travel?</h2>
+          <Input placeholder='Enter the number of days' type='number' className='w-full text-sm sm:text-base'
           onChange={(e) => handleInputChange('numberOfDays', e.target.value)}
           />
         </div>
 
         <div>
-          <h2 className='text-xl my-3 font-medium'>What is your Budget?</h2>
-          <div className='grid grid-cols-3 gap-5 mt-5'>
+          <h2 className='sm:text-xl text-base my-3 font-medium'>What is your Budget?</h2>
+          <div className='grid sm:grid-cols-3 gap-5 mt-5'>
             {SelectBudgetOptions.map((item, index) => (
               <div key={index} 
               onClick={() => handleInputChange('budget', item.title)}
               className={`p-4 cursor-pointer border rounded-lg hover:shadow-lg 
               ${formData.budget === item.title ? 'shadow-lg border-black' : ''}`}>
-                <h2 className='text-3xl'>{item.icon}</h2>
-                <h2 className='font-bold text-lg'>{item.title}</h2>
-                <h2 className='text-sm text-gray-500'>{item.desc}</h2>
+                <h2 className='sm:text-3xl text-xl'>{item.icon}</h2>
+                <h2 className='font-bold sm:text-lg text-sm'>{item.title}</h2>
+                <h2 className='sm:text-sm text-xs text-gray-500'>{item.desc}</h2>
               </div>
             ))}
           </div>
         </div>
 
         <div>
-          <h2 className='text-xl my-3 font-medium'>Who do you plan on travelling with on your next adventure?</h2>
-          <div className='grid grid-cols-3 gap-5 mt-5'>
+          <h2 className='sm:text-xl text-base my-3 font-medium'>Who do you plan on travelling with on your next adventure?</h2>
+          <div className='grid sm:grid-cols-3 gap-5 mt-5'>
             {SelectTravelList.map((item, index) => (
               <div key={index} 
               onClick={() => handleInputChange('travelers', item.people)}
               className={`p-4 cursor-pointer border rounded-lg hover:shadow-lg 
               ${formData.travelers === item.people ? 'shadow-lg border-black' : ''}`}>
-                <h2 className='text-3xl'>{item.icon}</h2>
-                <h2 className='font-bold text-lg'>{item.title}</h2>
-                <h2 className='text-sm text-gray-500'>{item.desc}</h2>
+                <h2 className='sm:text-3xl text-xl'>{item.icon}</h2>
+                <h2 className='font-bold sm:text-lg text-sm'>{item.title}</h2>
+                <h2 className='sm:text-xs text-xs text-gray-500'>{item.desc}</h2>
               </div>
             ))}
           </div>
@@ -187,7 +189,7 @@ function CreateTrip() {
         </Button>
       </div>
 
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex justify-center items-center">
@@ -195,16 +197,16 @@ function CreateTrip() {
             </DialogTitle>
             <DialogDescription className="flex flex-col justify-center items-center text-center mt-7">
               <span className="font-bold text-xl text-black">Login In or Sign Up</span>
-              <span className="text-center">with Google Authentication Securely.</span>
-              <Button onClick={login}
-              className="w-full my-5 flex gap-4 items-center justify-center rounded-full">
-                <FcGoogle style={{ transform: 'scale(1.3)' }} />Continue with Google
-              </Button>
-              <span className="text-xs text-center mt-2">
-                By logging in or signing up, you agree to WanderPathAI's Terms & Conditions and Privacy Policy
-              </span>
+              <span className="text-center">with Google Authentication Securely.</span>            
             </DialogDescription>
           </DialogHeader>
+          <Button onClick={login} className="w-full my-5 flex gap-4 items-center justify-center rounded-full">
+            <FcGoogle style={{ transform: 'scale(1.3)' }} />Continue with Google
+          </Button>
+          <DialogFooter className="text-xs text-center">
+            <p>By logging in or signing up, you agree to WanderPathAI's<a href="" className='text-blue-600'> Terms & Conditions </a>and
+            <a href="" className='text-blue-600'> Privacy Policy</a>.</p>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
