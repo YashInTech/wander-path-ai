@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { FaShareFromSquare } from "react-icons/fa6";
-import { Button } from '../../components/ui/Button';
 import { GetPlaceDetails, PHOTO_REF_URL } from '@/service/globalAPI';
 
 function InfoSection({trip}) {
@@ -34,9 +32,7 @@ function InfoSection({trip}) {
                 <h2 className='p-1 px-3 bg-gray-200 rounded-full text-gray-500 text-xs md:text-base'>💲 {trip?.userPreference?.budget} Budget</h2>
                 <h2 className='p-1 px-3 bg-gray-200 rounded-full text-gray-500 text-xs md:text-base'>🧳 {trip?.userPreference?.travelers}</h2>
                 </div>
-            </div>
-            {/* <Button className='md:h-[35px] md:w-[45px] rounded-full md:mt-2 mt-[7px] h-7 w-7'><FaShareFromSquare /></Button> */}
-        </div>
+            </div></div>
     </div>
   )
 }
