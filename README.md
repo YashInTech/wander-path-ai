@@ -40,6 +40,7 @@ npx shadcn@latest add button
 npx shadcn@latest add input
 npx shadcn@latest add sonner
 npx shadcn@latest add dialog
+npx shadcn@latest add popover
 ```
 This command will automatically add the components to the project, and you’ll be able to use it right away.
 
