@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { GetPlaceDetails, PHOTO_REF_URL } from '@/service/globalAPI';
 
@@ -9,23 +9,21 @@ function InfoSection({ trip }) {
   // Handle both array and object trips
   const tripData = Array.isArray(trip) ? trip[0] : trip;
 
-  useEffect(() => {
-    if (tripData) {
-      // Try to get photo from API
-      GetPlacePhoto();
-    }
-  }, [tripData]);
+  const GetPlacePhoto = useCallback(async () => {
+    if (!tripData) return;
 
-  const GetPlacePhoto = async () => {
     try {
-      // First check if we have a direct URL in the data
-      if (tripData?.tripData?.travelPlan?.location) {
-        // Try Google Places API as fallback
+      setIsLoading(true);
+
+      const locationQuery =
+        tripData?.userPreference?.location?.label ||
+        tripData?.tripData?.travelPlan?.location;
+
+      if (locationQuery) {
         const data = {
-          textQuery:
-            tripData?.userPreference?.location?.label ||
-            tripData?.tripData?.travelPlan?.location,
+          textQuery: locationQuery,
           languageCode: 'en',
+          maxResultCount: 1,
         };
 
         const response = await GetPlaceDetails(data);
@@ -46,7 +44,21 @@ function InfoSection({ trip }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [tripData]);
+
+  useEffect(() => {
+    GetPlacePhoto();
+  }, [GetPlacePhoto]);
+
+  if (!tripData) {
+    return (
+      <div className='animate-pulse'>
+        <div className='sm:h-[300px] h-52 w-full bg-gray-200 rounded-xl mb-5'></div>
+        <div className='h-8 bg-gray-200 rounded mb-2'></div>
+        <div className='h-6 bg-gray-200 rounded w-3/4'></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -70,7 +82,7 @@ function InfoSection({ trip }) {
             {tripData?.tripData?.travelPlan?.location ||
               tripData?.userPreference?.location?.label}
           </h2>
-          <div className='flex gap-5'>
+          <div className='flex gap-5 flex-wrap'>
             <h2 className='p-1 px-3 bg-gray-200 rounded-full text-gray-500 text-xs md:text-base'>
               📅 Number of Days:{' '}
               {tripData?.userPreference?.numberOfDays ||
@@ -104,14 +116,14 @@ InfoSection.propTypes = {
           location: PropTypes.string,
           duration: PropTypes.string,
           budget: PropTypes.string,
-          travelers: PropTypes.number,
+          travelers: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         }),
       }),
       userPreference: PropTypes.shape({
         location: PropTypes.shape({
           label: PropTypes.string,
         }),
-        numberOfDays: PropTypes.string,
+        numberOfDays: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         budget: PropTypes.string,
         travelers: PropTypes.string,
       }),

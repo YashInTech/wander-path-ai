@@ -22,7 +22,21 @@ export const GetPlaceDetails = (data) => {
     requestData.maxResultCount = data.maxResultCount;
   }
 
-  return axios.post(BASE_URL, requestData, config);
+  // Add error handling and timeout
+  return axios
+    .post(BASE_URL, requestData, {
+      ...config,
+      timeout: 10000, // 10 second timeout
+    })
+    .catch((error) => {
+      console.error('Places API Error:', error);
+      // Return a structured error response
+      return {
+        data: {
+          places: [],
+        },
+      };
+    });
 };
 
 export const PHOTO_REF_URL =
